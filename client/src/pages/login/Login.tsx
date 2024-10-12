@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import { apiRequest } from "../../lib/apiRequest";
+import { GoogleLogin } from "@react-oauth/google";
 
 const Login = () => {
   const [error, setError] = useState("");
@@ -52,6 +53,17 @@ const Login = () => {
     <div>
       <form onSubmit={handleSubmit}>
         <h1>Welcome back</h1>
+
+        {/* TODO: Google Login */}
+        <GoogleLogin
+          onSuccess={(credentialResponse) => {
+            console.log(credentialResponse);
+          }}
+          onError={() => {
+            console.log("Login Failed");
+          }}
+        />
+
         <input name="email" type="text" placeholder="Email" required />
         <input
           name="password"

@@ -1,7 +1,7 @@
 import { AxiosError } from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import apiRequest from "../../lib/apiRequest";
+import { apiRequest } from "../../lib/apiRequest";
 
 const Register = () => {
   const [error, setError] = useState("");

@@ -1,11 +1,21 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
-import apiRequest from "../../lib/apiRequest";
+import { AuthContext } from "../../context/AuthContext";
+import { apiRequest } from "../../lib/apiRequest";
 
 const Login = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const authContext = useContext(AuthContext);
+  if (!authContext) {
+    throw new Error(
+      "useContext(AuthContext) must be used within an AuthContextProvider"
+    );
+  }
+  const { updateUser } = authContext;
+
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -16,11 +26,11 @@ const Login = () => {
     const password = formData.get("password");
 
     try {
-      await apiRequest.post("/auth/login", {
+      const res = await apiRequest.post("/auth/login", {
         email,
         password,
       });
-
+      updateUser(res.data);
       navigate("/");
     } catch (err) {
       // Check if the error is an instance of AxiosError

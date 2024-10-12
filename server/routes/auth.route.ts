@@ -1,8 +1,10 @@
 import express from "express";
-import { register } from "../models/auth.model";
+import { register, login, logout } from "../models/auth.model";
 
 const router = express.Router();
 
 router.post("/register", register);
+router.post("/login", login);
+router.post("/logout", logout);
 
 export default router;

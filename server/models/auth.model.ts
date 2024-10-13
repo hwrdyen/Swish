@@ -6,6 +6,7 @@ import { PrismaClient } from "@prisma/client";
 
 const prismaClient = new PrismaClient();
 
+// TODO: Add Avatar submission through cloudinary
 export const register = async (req: Request, res: Response): Promise<void> => {
   const inputErrors = validationResult(req);
   if (!inputErrors.isEmpty()) {
@@ -14,7 +15,6 @@ export const register = async (req: Request, res: Response): Promise<void> => {
   }
 
   const { username, email, password } = req.body;
-
   try {
     // Error -- User already Exists
     const user = await prismaClient.user.findUnique({

@@ -21,3 +21,14 @@ model user {
   avatar    String?
   createdAt DateTime @default(now())
 }
+
+// TODO: create unique ID for team and user table in the future
+model team {
+  id           Int      @id @default(autoincrement()) @map("_id")
+  team_name    String   @unique
+  team_avatar  String?
+  team_creator Int
+  coach_list   String[]
+  player_list  String[]
+  createdAt    DateTime @default(now())
+}

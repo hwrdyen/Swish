@@ -25,6 +25,7 @@ function App() {
             element={
               <Layout>
                 {isLoggedIn ? `Hello ${currentUser?.username}` : "Hello World"}
+                {isLoggedIn ? `Hello ${currentUser?.avatar}` : "Hello World"}
               </Layout>
             }
           />

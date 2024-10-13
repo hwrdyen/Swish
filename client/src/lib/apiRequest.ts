@@ -4,4 +4,5 @@ const API_BASE_URL =
 
 export const apiRequest = axios.create({
   baseURL: API_BASE_URL,
+  withCredentials: true, // This will ensure that credentials like cookies are included in requests
 });

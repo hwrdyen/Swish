@@ -62,7 +62,7 @@ export const getTeams = async (req: Request, res: Response): Promise<void> => {
     });
 
     if (existingTeams.length > 0) {
-      res.status(200).json({ message: existingTeams });
+      res.status(200).json(existingTeams);
       return; // Ensure it returns void
     }
 

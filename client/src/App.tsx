@@ -1,21 +1,13 @@
 import "./App.scss";
-import { useContext } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AuthContext } from "./context/AuthContext";
 
 import Layout from "./layouts/Layout";
 import Register from "./pages/register/Register";
 import Login from "./pages/login/Login";
+import Home from "./pages/home/Home";
+import CreateTeam from "./pages/createTeam/CreateTeam";
 
 function App() {
-  const authContext = useContext(AuthContext);
-  if (!authContext) {
-    throw new Error(
-      "useContext(AuthContext) must be used within an AuthContextProvider"
-    );
-  }
-  const { currentUser, isLoggedIn } = authContext;
-
   return (
     <>
       <BrowserRouter>
@@ -24,13 +16,13 @@ function App() {
             path="/"
             element={
               <Layout>
-                {isLoggedIn ? `Hello ${currentUser?.username}` : "Hello World"}
-                {isLoggedIn ? <button>Create My Team</button> : ""}
+                <Home />
               </Layout>
             }
           />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/create-team" element={<CreateTeam />} />
         </Routes>
       </BrowserRouter>
     </>

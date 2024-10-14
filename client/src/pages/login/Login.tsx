@@ -76,6 +76,9 @@ const Login = () => {
         <p>
           {"Don't"} you have an account? <Link to="/register">Register</Link>
         </p>
+        <p>
+          Return to Home Page <Link to={"/"}>Home</Link>
+        </p>
       </form>
     </div>
   );

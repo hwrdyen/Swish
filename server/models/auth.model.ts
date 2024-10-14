@@ -14,7 +14,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     return; // Ensure it returns void
   }
 
-  const { username, email, password } = req.body;
+  const { id, username, email, password } = req.body;
   try {
     // Error -- User already Exists
     const user = await prismaClient.user.findUnique({
@@ -31,6 +31,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     // create newUser
     const newUser = await prismaClient.user.create({
       data: {
+        id,
         username,
         email,
         password: hashedPassword,

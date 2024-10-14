@@ -31,3 +31,21 @@ export const getPersonalProfile = async (
     res.status(500).json({ message: "Something went wrong" });
   }
 };
+
+export const getUsers = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const user = await prismaClient.user.findMany({
+      select: { id: true, email: true, username: true, avatar: true },
+    });
+
+    if (!user) {
+      res.status(400).json({ message: "User not found" });
+      return;
+    }
+
+    res.json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};

@@ -14,7 +14,7 @@ datasource db {
 }
 
 model user {
-  id        Int      @id @default(autoincrement()) @map("_id")
+  id        String   @id @unique @map("_id")
   email     String   @unique
   username  String   @unique
   password  String
@@ -24,10 +24,10 @@ model user {
 
 // TODO: create unique ID for team and user table in the future
 model team {
-  id           Int      @id @default(autoincrement()) @map("_id")
+  id           String   @id @unique @map("_id")
   team_name    String   @unique
   team_avatar  String?
-  team_creator Int
+  team_creator String
   coach_list   String[]
   player_list  String[]
   createdAt    DateTime @default(now())

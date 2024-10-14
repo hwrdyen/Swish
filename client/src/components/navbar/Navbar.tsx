@@ -38,13 +38,13 @@ const Navbar = () => {
   return (
     <>
       <Link to={"/"}>Swish</Link>
-      <Link to={"/login"}>Login</Link>
+
       {isLoggedIn ? (
         <button onClick={handleLogout} disabled={isLoading}>
           Logout
         </button>
       ) : (
-        ""
+        <Link to={"/login"}>Login</Link>
       )}
     </>
   );

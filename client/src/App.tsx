@@ -6,6 +6,7 @@ import Register from "./pages/register/Register";
 import Login from "./pages/login/Login";
 import Home from "./pages/home/Home";
 import CreateTeam from "./pages/createTeam/CreateTeam";
+import SingleTeam from "./pages/singleTeam/SingleTeam";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/create-team" element={<CreateTeam />} />
+          <Route path="/team/:team_id" element={<SingleTeam />} />
         </Routes>
       </BrowserRouter>
     </>

@@ -39,6 +39,9 @@ const Home = () => {
       {isLoggedIn ? (
         <>
           <p>Hello {currentUser?.username}</p>
+          <p>
+            Check your <Link to={"/profile"}>Profile</Link>
+          </p>
           <button onClick={handleClick}>Create My Team</button>
           <div>
             <h2>Created Teams:</h2>

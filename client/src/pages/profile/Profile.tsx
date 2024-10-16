@@ -1,20 +1,38 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { UserProfile } from "../../config/user-config";
 import { apiRequest } from "../../lib/apiRequest";
+import { AuthContext } from "../../context/AuthContext";
 
 const Profile = () => {
   const [error, setError] = useState("");
   const [profileData, setProfileData] = useState<UserProfile | null>(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  //   const authContext = useContext(AuthContext);
-  //   if (!authContext) {
-  //     throw new Error(
-  //       "useContext(AuthContext) must be used within an AuthContextProvider"
-  //     );
-  //   }
-  //   const { currentUser, isLoggedIn } = authContext;
+  const navigate = useNavigate();
+
+  const authContext = useContext(AuthContext);
+  if (!authContext) {
+    throw new Error(
+      "useContext(AuthContext) must be used within an AuthContextProvider"
+    );
+  }
+  const { updateUser } = authContext;
+
+  const handleDelete = async () => {
+    try {
+      setDeleteLoading(true);
+      await apiRequest.delete("/user/delete-me");
+      await updateUser(null);
+      navigate("/");
+    } catch (err) {
+      console.error("Failed to fetch team data", err);
+      setError("Failed to fetch team data."); // Set error message on fetch failure
+    } finally {
+      setDeleteLoading(false); // Stop loading when done
+    }
+  };
 
   const fetchProfileInfo = async () => {
     try {
@@ -58,11 +76,23 @@ const Profile = () => {
             <h1>User Id: {profileData.id}</h1>
             <h1>User name: {profileData.username}</h1>
             <h1>User email: {profileData.email}</h1>
+            {profileData.avatar ? (
+              <img src={profileData.avatar} alt="User Avatar" />
+            ) : (
+              <img
+                src={"/user-avatar.png"}
+                alt="Default Avatar"
+                style={{ width: "100px", height: "100px" }}
+              />
+            )}
           </div>
         ) : (
           <div>Loading...</div> // Show loading indicator while fetching data
         )}
       </div>
+      <button onClick={handleDelete} disabled={deleteLoading}>
+        Delete User
+      </button>
       <Link to={"/"}>Home</Link>
     </div>
   );

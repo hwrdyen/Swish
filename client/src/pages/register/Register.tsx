@@ -12,20 +12,20 @@ const Register = () => {
   const [avatarFile, setAvatarFile] = useState<File | null>(null); // Store the dropped file
   const navigate = useNavigate();
 
-  // const uploadToCloudinary = async (file: File): Promise<string | null> => {
-  //   const formData = new FormData();
-  //   formData.append("avatar", file);
+  const uploadToCloudinary = async (file: File): Promise<string | null> => {
+    const formData = new FormData();
+    formData.append("avatar", file);
 
-  //   try {
-  //     const response = await apiRequest.post("/user/upload-avatar", formData, {
-  //       headers: { "Content-Type": "multipart/form-data" },
-  //     });
-  //     return response.data.url; // Return Cloudinary URL
-  //   } catch (error) {
-  //     console.error("Cloudinary upload failed:", error);
-  //     return null;
-  //   }
-  // };
+    try {
+      const response = await apiRequest.post("/user/upload-avatar", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      return response.data.avatarUrl; // Return Cloudinary URL
+    } catch (error) {
+      console.error("Cloudinary upload failed:", error);
+      return null;
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -40,22 +40,22 @@ const Register = () => {
       let avatarUrl = null;
 
       // Upload the avatar to Cloudinary if a file was dropped
-      // if (avatarFile) {
-      //   try {
-      //     avatarUrl = await uploadToCloudinary(avatarFile);
-      //   } catch (err) {
-      //     // Check if the error is an instance of AxiosError
-      //     if (err instanceof AxiosError) {
-      //       // Access error message from the response data
-      //       console.log(err.response?.data.message);
-      //       setError(err.response?.data.message || "An error occurred.");
-      //     } else {
-      //       // Handle non-Axios errors
-      //       console.log("Error:", err);
-      //       setError("An unexpected error occurred. Please try again.");
-      //     }
-      //   }
-      // }
+      if (avatarFile) {
+        try {
+          avatarUrl = await uploadToCloudinary(avatarFile);
+        } catch (err) {
+          // Check if the error is an instance of AxiosError
+          if (err instanceof AxiosError) {
+            // Access error message from the response data
+            console.log(err.response?.data.message);
+            setError(err.response?.data.message || "An error occurred.");
+          } else {
+            // Handle non-Axios errors
+            console.log("Error:", err);
+            setError("An unexpected error occurred. Please try again.");
+          }
+        }
+      }
 
       await apiRequest.post("/auth/register", {
         id,
@@ -88,14 +88,14 @@ const Register = () => {
       <form onSubmit={handleSubmit}>
         <h1>Create Your Account</h1>
         <div>
-          {/* {previewUrl && (
+          {previewUrl && (
             <img
               src={previewUrl}
               alt="Preview"
               style={{ width: "100px", height: "100px", objectFit: "cover" }}
             />
           )}
-          <Dropzone setAvatarFile={setAvatarFile} setPreview={setPreviewUrl} /> */}
+          <Dropzone setAvatarFile={setAvatarFile} setPreview={setPreviewUrl} />
         </div>
 
         <input name="username" type="text" placeholder="User Name" required />

@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
-import multer from "multer";
 import cloudinary from "cloudinary";
 
 const prismaClient = new PrismaClient();
@@ -85,26 +84,53 @@ export const deleteUser = async (
   }
 };
 
-// async function uploadProfileImage(imageFiles: Express.Multer.File[]) {
-//   const uploadPromises = imageFiles.map(async (image) => {
-//     // we encode the image as a Base-64 string
-//     const b64 = Buffer.from(image.buffer).toString("base64");
-//     // we create a string that describes the image
-//     let dataURI = "data:" + image.mimetype + ";base64," + b64;
-//     // using the cloudinary SDK to upload this image to our cloudinary account
-//     const res = await cloudinary.v2.uploader.upload(dataURI);
-//     // if its success, then it'll return the URL
-//     // (if we have five images, then all images will be uploaded at the same time
-//     // and before we get the image URL back)
-//     return res.url;
-//   });
-// }
+// Function to upload image to Cloudinary
+async function uploadProfileImage(
+  avatarFile: Express.Multer.File
+): Promise<string> {
+  // Encode the image as a Base-64 string
+  const b64 = Buffer.from(avatarFile.buffer).toString("base64");
+  // Create a string that describes the image
+  const dataURI = `data:${avatarFile.mimetype};base64,${b64}`;
 
-// export const postPersonalAvatar = async (
-//   req: Request,
-//   res: Response
-// ): Promise<void> => {
-//   const file = req.files as Express.Multer.File[];
-//   const profileAvatarUrl = await uploadProfileImage(file);
-//   res.status(201).json(profileAvatarUrl);
-// };
+  try {
+    // Upload the image to Cloudinary using the Cloudinary SDK
+    const res = await cloudinary.v2.uploader.upload(dataURI, {
+      folder: "/swish/avatar-img", // Specify the folder name
+    });
+    // Return the URL if the upload is successful
+    return res.url;
+  } catch (error) {
+    console.error("Error uploading to Cloudinary:", error);
+    throw new Error("Failed to upload avatar image.");
+  }
+}
+
+// Controller for handling avatar upload
+export const postPersonalAvatar = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const file = req.file as Express.Multer.File;
+
+    if (!file) {
+      res.status(400).json({ message: "No file uploaded." });
+      return;
+    }
+    const profileAvatarUrl = await uploadProfileImage(file);
+
+    res.status(201).json({ avatarUrl: profileAvatarUrl });
+  } catch (error) {
+    // TypeScript recognizes 'error' as 'unknown', so we must narrow its type
+    if (error instanceof Error) {
+      // Handle the error if it is an instance of Error
+      console.error("Error in postPersonalAvatar:", error.message);
+      res.status(500).json({ message: error.message });
+    } else {
+      // If 'error' is of an unexpected type, return a generic message
+      console.error("Unexpected error in postPersonalAvatar:", error);
+      res.status(500).json({ message: "An unknown error occurred." });
+    }
+  }
+};

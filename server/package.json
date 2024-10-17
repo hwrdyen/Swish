@@ -5,7 +5,8 @@
   "main": "./src/index.ts",
   "scripts": {
     "start": "npx nodemon",
-    "update-DB": "npx prisma db push",
+    "sync-DB": "npx prisma db push",
+    "reset-DB": "npx prisma migrate dev",
     "update-Prisma": "npx prisma generate"
   },
   "author": "",

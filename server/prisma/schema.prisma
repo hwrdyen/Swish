@@ -31,4 +31,21 @@ model team {
   coach_list   String[]
   player_list  String[]
   createdAt    DateTime @default(now())
+
+  // Define the relationship with the Game model
+  home_games game[] @relation("HomeTeam")
+  away_games game[] @relation("AwayTeam")
+}
+
+model game {
+  id        String   @id @unique @map("_id")
+  game_date DateTime
+
+  // Define home_team and away_team as foreign keys
+  home_team_id String
+  away_team_id String
+
+  // Set up foreign key relations to Team model
+  home_team team @relation("HomeTeam", fields: [home_team_id], references: [id])
+  away_team team @relation("AwayTeam", fields: [away_team_id], references: [id])
 }

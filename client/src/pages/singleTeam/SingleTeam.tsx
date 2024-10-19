@@ -51,14 +51,16 @@ const SingleTeam = () => {
         {singleTeamData ? (
           <div>
             <h1>Team name: {singleTeamData.team_name}</h1>
-            <h1>Team creator: {singleTeamData.team_creator}</h1>
+            <h1>Team creator: {singleTeamData.team_creator_id}</h1>
             <h1>Team Players:</h1>
             <div>
               {Array.isArray(singleTeamData.player_list) &&
               singleTeamData.player_list.length > 0 ? ( // Type guard for player_list
                 <ul>
-                  {singleTeamData.player_list.map((player, index) => (
-                    <li key={index}>{player}</li> // Assuming player is a string or adjust based on the player structure
+                  {singleTeamData.player_list.map((player) => (
+                    <li key={player.id}>
+                      {player.username} - {player.email}
+                    </li> // Adjusted to display the player's username
                   ))}
                 </ul>
               ) : (

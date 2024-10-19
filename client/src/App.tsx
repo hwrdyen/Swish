@@ -8,6 +8,8 @@ import Home from "./pages/home/Home";
 import CreateTeam from "./pages/createTeam/CreateTeam";
 import SingleTeam from "./pages/singleTeam/SingleTeam";
 import Profile from "./pages/profile/Profile";
+import CreateTour from "./pages/createTour/CreateTour";
+import SingleTour from "./pages/singleTour/SingleTour";
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/create-team" element={<CreateTeam />} />
           <Route path="/team/:team_id" element={<SingleTeam />} />
+          <Route path="/create-tour" element={<CreateTour />} />
+          <Route path="/tour/:tour_id" element={<SingleTour />} />
         </Routes>
       </BrowserRouter>
     </>

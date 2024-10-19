@@ -134,3 +134,27 @@ export const postPersonalAvatar = async (
     }
   }
 };
+
+export const getMyTournament = async (req: Request, res: Response) => {
+  const userId = req.userId;
+
+  try {
+    const playerWithTournaments = await prismaClient.user.findUnique({
+      where: { id: userId },
+      include: {
+        teams: {
+          include: {
+            tournaments: true, // Include tournaments associated with the teams
+          },
+        },
+      },
+    });
+
+    const tournaments =
+      playerWithTournaments?.teams.flatMap((team) => team.tournaments) || [];
+    res.json(tournaments);
+  } catch (error) {
+    console.error("Error fetching tournaments:", error);
+    res.status(500).json({ error: "Failed to fetch tournaments" });
+  }
+};

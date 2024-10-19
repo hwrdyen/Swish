@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { apiRequest } from "../../lib/apiRequest";
 import { TeamData } from "../../config/team-config";
+import { TourData } from "../../config/tournament-config";
 
 const Home = () => {
   const authContext = useContext(AuthContext);
@@ -14,25 +15,46 @@ const Home = () => {
   const { currentUser, isLoggedIn } = authContext;
 
   const navigate = useNavigate();
-  const handleClick = () => {
+  const handleCreateTeam = () => {
     navigate("/create-team");
+  };
+  const handleCreateTournament = () => {
+    navigate("/create-tour");
   };
 
   // Fetch team data from the API
   const [allTeamData, setAllTeamData] = useState<TeamData[]>([]);
+  const [fetchingTeams, setFetchingTeams] = useState(true);
+  const fetchTeams = async () => {
+    try {
+      const response = await apiRequest.get("/team/created-teams");
+      setAllTeamData(response.data); // Assuming the data is stored in response.data
+    } catch (error) {
+      console.error("Failed to fetch team data", error);
+    } finally {
+      setFetchingTeams(false);
+    }
+  };
   useEffect(() => {
-    const fetchTeams = async () => {
-      try {
-        const response = await apiRequest.get("/team/created-teams");
-        setAllTeamData(response.data); // Assuming the data is stored in response.data
-        // console.log(response.data); // Log fetched data
-      } catch (error) {
-        console.error("Failed to fetch team data", error);
-      }
-    };
-
     fetchTeams();
-  }, []); // Empty dependency array to fetch once on component mount
+  }, []); // (TODO) refetch when update - NOW: Empty dependency array to fetch once on component mount
+
+  // Fetch my-tour data from the API
+  const [allTourData, setAllTourData] = useState<TourData[]>([]);
+  const [fetchingTours, setFetchingTours] = useState(true);
+  const fetchTours = async () => {
+    try {
+      const response = await apiRequest.get("/user/my-tours");
+      setAllTourData(response.data); // Assuming the data is stored in response.data
+    } catch (error) {
+      console.error("Failed to fetch tour data", error);
+    } finally {
+      setFetchingTours(false);
+    }
+  };
+  useEffect(() => {
+    fetchTours();
+  }, []);
 
   return (
     <div>
@@ -42,20 +64,45 @@ const Home = () => {
           <p>
             Check your <Link to={"/profile"}>Profile</Link>
           </p>
-          <button onClick={handleClick}>Create My Team</button>
+          <button onClick={handleCreateTeam}>Create My Team</button>
+          <button onClick={handleCreateTournament}>Create My Tournament</button>
           <div>
             <h2>Created Teams:</h2>
-            {allTeamData.length > 0 ? (
-              <ul>
-                {allTeamData.map((team) => (
-                  <li key={team.id}>
-                    <Link to={`/team/${team.id}`}>{team.team_name}</Link>
-                  </li>
-                ))}
-              </ul>
+            {!fetchingTeams ? (
+              allTeamData.length > 0 ? (
+                <ul>
+                  {allTeamData.map((team) => (
+                    <li key={team.id}>
+                      <Link to={`/team/${team.id}`}>{team.team_name}</Link>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>No teams available</p>
+              )
             ) : (
-              <p>No teams available</p>
+              <p>Fetching Teams...</p>
             )}
+
+            <h2>Participated Tournament:</h2>
+            {!fetchingTours ? (
+              allTourData.length > 0 ? (
+                <ul>
+                  {allTourData.map((tour) => (
+                    <li key={tour.id}>
+                      <Link to={`/tour/${tour.id}`}>
+                        {tour.tournament_name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>No tours available</p>
+              )
+            ) : (
+              <p>Fetching Tours...</p>
+            )}
+
             <h2>All Game Schedule:</h2>
           </div>
         </>

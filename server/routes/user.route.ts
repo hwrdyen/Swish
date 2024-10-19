@@ -3,6 +3,7 @@ import verifyToken from "../middleware/verifyToken";
 import multer from "multer";
 import {
   deleteUser,
+  getMyTournament,
   getPersonalProfile,
   getUsers,
   postPersonalAvatar,
@@ -23,5 +24,6 @@ router.post("/upload-avatar", upload.single("avatar"), postPersonalAvatar);
 router.delete("/delete-me", verifyToken, deleteUser);
 router.get("/me", verifyToken, getPersonalProfile);
 router.get("/users", verifyToken, getUsers);
+router.get("/my-tours", verifyToken, getMyTournament);
 
 export default router;

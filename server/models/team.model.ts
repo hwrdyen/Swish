@@ -40,7 +40,7 @@ export const createTeam = async (
       data: {
         id: id,
         team_name: team_name,
-        team_creator: team_creator, // Use the corrected field name
+        team_creator_id: team_creator, // Use the corrected field name
         coach_list: coach_list, // Defaults to empty array if not provided
         player_list: player_list, // Defaults to empty array if not provided
       },
@@ -63,7 +63,7 @@ export const getCreatedTeams = async (
   try {
     // Check if the team already exists
     const existingTeams = await prismaClient.team.findMany({
-      where: { team_creator: userId },
+      where: { team_creator_id: userId },
     });
 
     if (existingTeams.length > 0) {
@@ -95,6 +95,33 @@ export const getSingleTeam = async (
     }
 
     res.status(201).json(team_info);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: err });
+  }
+};
+
+export const deleteSingleTeam = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const team_id = req.params.team_id;
+
+  try {
+    // Check if the team already exists
+    const team_info = await prismaClient.team.findUnique({
+      where: { id: team_id },
+    });
+    if (!team_info) {
+      res.status(500).json("No team was associated with this id!");
+      return; // Ensure it returns void
+    }
+
+    await prismaClient.team.delete({
+      where: { id: team_id },
+    });
+
+    res.status(200).json({ message: "Team deleted successfully!" });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: err });

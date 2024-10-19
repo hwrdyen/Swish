@@ -20,32 +20,66 @@ model user {
   password  String
   avatar    String?
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Define the relationship with the Team model
+  teams team[] @relation("Players")
+  team  team[]
 }
 
-// TODO: create unique ID for team and user table in the future
 model team {
-  id           String   @id @unique @map("_id")
-  team_name    String   @unique
-  team_avatar  String?
-  team_creator String
-  coach_list   String[]
-  player_list  String[]
-  createdAt    DateTime @default(now())
+  id          String   @id @unique @map("_id")
+  team_name   String   @unique
+  team_avatar String?
+  coach_list  String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  team_creator_id String
+  creator         user   @relation(fields: [team_creator_id], references: [id])
+
+  // Define the player_list as a relation to user
+  player_list user[] @relation("Players") // This will store the foreign key references to user IDs
 
   // Define the relationship with the Game model
   home_games game[] @relation("HomeTeam")
   away_games game[] @relation("AwayTeam")
+
+  // Define the relationship with the Tournament model (Many-to-Many relation)
+  tournaments tournament[] @relation("TournamentTeams")
 }
 
 model game {
-  id        String   @id @unique @map("_id")
-  game_date DateTime
+  id              String   @id @unique @map("_id")
+  game_date       DateTime
+  home_team_score Int?
+  away_team_score Int?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   // Define home_team and away_team as foreign keys
   home_team_id String
   away_team_id String
 
   // Set up foreign key relations to Team model
-  home_team team @relation("HomeTeam", fields: [home_team_id], references: [id])
-  away_team team @relation("AwayTeam", fields: [away_team_id], references: [id])
+  home_team team @relation("HomeTeam", fields: [home_team_id], references: [id], onDelete: Cascade)
+  away_team team @relation("AwayTeam", fields: [away_team_id], references: [id], onDelete: Cascade)
+
+  // Define the relationship with the Tournament model (Many-to-One relation)
+  tournament_id String
+  tournament    tournament? @relation("TournamentGames", fields: [tournament_id], references: [id])
+}
+
+model tournament {
+  id                String   @id @unique @map("_id")
+  tournament_name   String
+  tournament_avatar String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Define Many-to-Many relationship with teams
+  team_list team[] @relation("TournamentTeams")
+
+  // Define One-to-Many relationship with games
+  game_list game[] @relation("TournamentGames")
 }

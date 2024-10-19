@@ -9,6 +9,8 @@ import { v2 as cloudinary } from "cloudinary";
 import authRoute from "../routes/auth.route";
 import userRoute from "../routes/user.route";
 import teamRoute from "../routes/team.route";
+import gameRoute from "../routes/game.route";
+import tourRoute from "../routes/tournament.route";
 
 const PORT = process.env.PORT || 5000;
 const connectionString = process.env.DATABASE_URL;
@@ -50,6 +52,8 @@ app.use(
 app.use("/api/auth", authRoute);
 app.use("/api/user", userRoute);
 app.use("/api/team", teamRoute);
+app.use("/api/game", gameRoute);
+app.use("/api/tour", tourRoute);
 
 app.get("/", async (req: Request, res: Response) => {
   res.send("hello world!");

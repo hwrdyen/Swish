@@ -15,7 +15,7 @@ export const createTournament = async (req: Request, res: Response) => {
     const { id, tournament_name, tournament_avatar, team_list, game_list } =
       req.body;
 
-    const newTournament = prismaClient.tournament.create({
+    const newTournament = await prismaClient.tournament.create({
       data: { id, tournament_name, tournament_avatar, team_list, game_list },
     });
 
@@ -36,7 +36,7 @@ export const getTournaments = async (req: Request, res: Response) => {
       return; // Ensure it returns void
     }
 
-    const existingTournaments = prismaClient.tournament.findMany();
+    const existingTournaments = await prismaClient.tournament.findMany();
 
     res.status(201).json(existingTournaments);
   } catch (err) {
@@ -50,6 +50,10 @@ export const getSingleTournament = async (req: Request, res: Response) => {
   try {
     const tournament_info = await prismaClient.tournament.findUnique({
       where: { id: tournament_id },
+      include: {
+        team_list: true,
+        game_list: true,
+      },
     });
     if (!tournament_info) {
       res.status(500).json("No tournament was associated with this id!");

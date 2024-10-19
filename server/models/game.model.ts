@@ -26,7 +26,7 @@ export const createGame = async (req: Request, res: Response) => {
     const newGame = await prismaClient.game.create({
       data: {
         id: id,
-        game_date: game_date,
+        game_date: new Date(game_date),
         home_team_score: home_team_score,
         away_team_score: away_team_score,
         home_team_id: home_team_id,
@@ -57,6 +57,11 @@ export const getSingleGame = async (req: Request, res: Response) => {
   try {
     const game_info = await prismaClient.game.findUnique({
       where: { id: game_id },
+      include: {
+        home_team: true,
+        away_team: true,
+        tournament: true,
+      },
     });
     if (!game_info) {
       res.status(500).json("No game was associated with this id!");

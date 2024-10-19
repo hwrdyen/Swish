@@ -22,30 +22,36 @@ model user {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // Define the relationship with the Team model
-  teams team[] @relation("Players")
-  team  team[]
+  // Teams where the user is the creator
+  created_teams team[] @relation("TeamCreator")
+
+  // Teams where the user is a player
+  teams team[] @relation("TeamPlayers")
+
+  // Teams where the user is a coach
+  coaching_teams team[] @relation("TeamCoaches")
 }
 
 model team {
   id          String   @id @unique @map("_id")
   team_name   String   @unique
   team_avatar String?
-  coach_list  String[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
+  // Relation to the user who is the creator
   team_creator_id String
-  creator         user   @relation(fields: [team_creator_id], references: [id])
+  creator         user   @relation("TeamCreator", fields: [team_creator_id], references: [id])
 
-  // Define the player_list as a relation to user
-  player_list user[] @relation("Players") // This will store the foreign key references to user IDs
+  // Relation for players in the team
+  player_list user[] @relation("TeamPlayers")
 
-  // Define the relationship with the Game model
-  home_games game[] @relation("HomeTeam")
-  away_games game[] @relation("AwayTeam")
+  // Relation for coaches in the team (also users)
+  coach_list user[] @relation("TeamCoaches")
 
-  // Define the relationship with the Tournament model (Many-to-Many relation)
+  // Relations with other models
+  home_games  game[]       @relation("HomeTeam")
+  away_games  game[]       @relation("AwayTeam")
   tournaments tournament[] @relation("TournamentTeams")
 }
 

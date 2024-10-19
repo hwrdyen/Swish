@@ -19,7 +19,7 @@ export const createTeam = async (
   const {
     id,
     team_name,
-    team_creator,
+    team_creator_id,
     coach_list = [],
     player_list = [],
   } = req.body;
@@ -40,7 +40,7 @@ export const createTeam = async (
       data: {
         id: id,
         team_name: team_name,
-        team_creator_id: team_creator, // Use the corrected field name
+        team_creator_id: team_creator_id, // Use the corrected field name
         coach_list: coach_list, // Defaults to empty array if not provided
         player_list: player_list, // Defaults to empty array if not provided
       },
@@ -78,6 +78,26 @@ export const getCreatedTeams = async (
   }
 };
 
+export const getAllTeams = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    // Check if the team already exists
+    const allTeams = await prismaClient.team.findMany({});
+
+    if (allTeams.length > 0) {
+      res.status(200).json(allTeams);
+      return; // Ensure it returns void
+    }
+
+    res.status(201).json({ message: `No team was created!` });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to load team!" });
+  }
+};
+
 export const getSingleTeam = async (
   req: Request,
   res: Response
@@ -88,6 +108,10 @@ export const getSingleTeam = async (
     // Check if the team already exists
     const team_info = await prismaClient.team.findUnique({
       where: { id: team_id },
+      include: {
+        player_list: true, // Include players
+        coach_list: true, // Include coaches
+      },
     });
     if (!team_info) {
       res.status(500).json("No team was associated with this id!");

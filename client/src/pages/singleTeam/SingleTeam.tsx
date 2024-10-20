@@ -67,6 +67,21 @@ const SingleTeam = () => {
                 <p>No players available</p> // Message for empty player_list
               )}
             </div>
+            <h1>Team Coaches:</h1>
+            <div>
+              {Array.isArray(singleTeamData.coach_list) &&
+              singleTeamData.coach_list.length > 0 ? (
+                <ul>
+                  {singleTeamData.coach_list.map((coach) => (
+                    <li key={coach.id}>
+                      {coach.username} - {coach.email}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>No coaches available</p> // Message for empty player_list
+              )}
+            </div>
           </div>
         ) : (
           <div>Loading...</div> // Show loading indicator while fetching data

@@ -2,8 +2,8 @@ import { useState, useEffect, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { apiRequest } from "../../lib/apiRequest";
-import { TeamData } from "../../config/team-config";
 import { TourData } from "../../config/tournament-config";
+import { useTeams } from "../../hooks/useTeam";
 
 const Home = () => {
   const authContext = useContext(AuthContext);
@@ -23,21 +23,7 @@ const Home = () => {
   };
 
   // Fetch team data from the API
-  const [allTeamData, setAllTeamData] = useState<TeamData[]>([]);
-  const [fetchingTeams, setFetchingTeams] = useState(true);
-  const fetchTeams = async () => {
-    try {
-      const response = await apiRequest.get("/team/created-teams");
-      setAllTeamData(response.data); // Assuming the data is stored in response.data
-    } catch (error) {
-      console.error("Failed to fetch team data", error);
-    } finally {
-      setFetchingTeams(false);
-    }
-  };
-  useEffect(() => {
-    fetchTeams();
-  }, []); // (TODO) refetch when update - NOW: Empty dependency array to fetch once on component mount
+  const { allTeamData, fetchingTeams } = useTeams();
 
   // Fetch my-tour data from the API
   const [allTourData, setAllTourData] = useState<TourData[]>([]);

@@ -5,11 +5,13 @@ import { apiRequest } from "../../lib/apiRequest";
 import { AuthContext } from "../../context/AuthContext";
 import { v4 as uuidv4 } from "uuid";
 import { UserProfile } from "../../config/user-config";
+import { useTeams } from "../../hooks/useTeam";
 
 const CreateTeam = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { fetchTeams } = useTeams();
 
   const [players, setPlayers] = useState<string[]>([""]);
   const [coaches, setCoaches] = useState<string[]>([""]);
@@ -44,6 +46,7 @@ const CreateTeam = () => {
         player_list: formattedPlayerList,
         coach_list: formattedCoachList,
       });
+      await fetchTeams(); // Re-fetch the team list after creating a new team
       navigate("/");
     } catch (err) {
       // Check if the error is an instance of AxiosError

@@ -26,11 +26,11 @@ export const createTeam = async (
 
   try {
     // Check if the team already exists
-    const existingTeams = await prismaClient.team.findMany({
+    const existingTeams = await prismaClient.team.findUnique({
       where: { team_name: team_name },
     });
 
-    if (existingTeams.length > 0) {
+    if (existingTeams) {
       res.status(400).json({ message: "Team already exists" });
       return; // Ensure it returns void
     }

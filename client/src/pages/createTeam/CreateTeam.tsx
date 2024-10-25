@@ -11,7 +11,7 @@ const CreateTeam = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const { fetchTeams } = useTeams();
+  const { fetchCreatedTeams } = useTeams();
 
   const [players, setPlayers] = useState<string[]>([""]);
   const [coaches, setCoaches] = useState<string[]>([""]);
@@ -39,14 +39,14 @@ const CreateTeam = () => {
     };
 
     try {
-      apiRequest.post("/team/created-teams", {
+      await apiRequest.post("/team/created-teams", {
         id: uuidv4(),
         team_name,
         team_creator_id,
         player_list: formattedPlayerList,
         coach_list: formattedCoachList,
       });
-      await fetchTeams(); // Re-fetch the team list after creating a new team
+      await fetchCreatedTeams(); // Re-fetch the team list after creating a new team
       navigate("/");
     } catch (err) {
       // Check if the error is an instance of AxiosError

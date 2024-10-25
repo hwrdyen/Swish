@@ -3,23 +3,48 @@ import { apiRequest } from "../lib/apiRequest"; // Adjust path as needed
 import { TeamData } from "../config/team-config";
 
 export const useTeams = () => {
-  const [allTeamData, setAllTeamData] = useState<TeamData[]>([]);
-  const [fetchingTeams, setFetchingTeams] = useState(true);
+  const [allCreatedTeamData, setAllCreatedTeamData] = useState<TeamData[]>([]);
+  const [fetchingCreatedTeams, setFetchingCreatedTeams] = useState(true);
 
-  const fetchTeams = async () => {
+  const fetchCreatedTeams = async () => {
     try {
       const response = await apiRequest.get("/team/created-teams");
-      setAllTeamData(response.data);
+      setAllCreatedTeamData(response.data);
     } catch (error) {
       console.error("Failed to fetch team data", error);
     } finally {
-      setFetchingTeams(false);
+      setFetchingCreatedTeams(false);
     }
   };
 
   useEffect(() => {
-    fetchTeams();
+    fetchCreatedTeams();
+  }, [allCreatedTeamData]);
+
+  const [allTeamData, setAllTeamData] = useState<TeamData[]>([]);
+  const [fetchingAllTeams, setFetchingAllTeams] = useState(true);
+
+  const fetchAllTeams = async () => {
+    try {
+      const response = await apiRequest.get("/team/all-teams");
+      setAllTeamData(response.data);
+    } catch (error) {
+      console.error("Failed to fetch team data", error);
+    } finally {
+      setFetchingAllTeams(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllTeams();
   }, [allTeamData]);
 
-  return { allTeamData, fetchingTeams, fetchTeams };
+  return {
+    allCreatedTeamData,
+    fetchingCreatedTeams,
+    fetchCreatedTeams,
+    allTeamData,
+    fetchingAllTeams,
+    fetchAllTeams,
+  };
 };

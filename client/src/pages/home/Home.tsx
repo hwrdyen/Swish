@@ -1,9 +1,8 @@
-import { useState, useEffect, useContext } from "react";
+import { useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
-import { apiRequest } from "../../lib/apiRequest";
-import { TourData } from "../../config/tournament-config";
 import { useTeams } from "../../hooks/useTeam";
+import { useTours } from "../../hooks/useTour";
 
 const Home = () => {
   const authContext = useContext(AuthContext);
@@ -23,24 +22,25 @@ const Home = () => {
   };
 
   // Fetch team data from the API
-  const { allTeamData, fetchingTeams } = useTeams();
+  const { allCreatedTeamData, fetchingCreatedTeams } = useTeams();
 
   // Fetch my-tour data from the API
-  const [allTourData, setAllTourData] = useState<TourData[]>([]);
-  const [fetchingTours, setFetchingTours] = useState(true);
-  const fetchTours = async () => {
-    try {
-      const response = await apiRequest.get("/user/my-tours");
-      setAllTourData(response.data); // Assuming the data is stored in response.data
-    } catch (error) {
-      console.error("Failed to fetch tour data", error);
-    } finally {
-      setFetchingTours(false);
-    }
-  };
-  useEffect(() => {
-    fetchTours();
-  }, []);
+  const { allTourData, fetchingTours } = useTours();
+  // const [allTourData, setAllTourData] = useState<TourData[]>([]);
+  // const [fetchingTours, setFetchingTours] = useState(true);
+  // const fetchTours = async () => {
+  //   try {
+  //     const response = await apiRequest.get("/user/my-tours");
+  //     setAllTourData(response.data); // Assuming the data is stored in response.data
+  //   } catch (error) {
+  //     console.error("Failed to fetch tour data", error);
+  //   } finally {
+  //     setFetchingTours(false);
+  //   }
+  // };
+  // useEffect(() => {
+  //   fetchTours();
+  // }, []);
 
   return (
     <div>
@@ -54,12 +54,14 @@ const Home = () => {
           <button onClick={handleCreateTournament}>Create My Tournament</button>
           <div>
             <h2>Created Teams:</h2>
-            {!fetchingTeams ? (
-              allTeamData.length > 0 ? (
+            {!fetchingCreatedTeams ? (
+              allCreatedTeamData.length > 0 ? (
                 <ul>
-                  {allTeamData.map((team) => (
-                    <li key={team.id}>
-                      <Link to={`/team/${team.id}`}>{team.team_name}</Link>
+                  {allCreatedTeamData.map((CreatedTeam) => (
+                    <li key={CreatedTeam.id}>
+                      <Link to={`/team/${CreatedTeam.id}`}>
+                        {CreatedTeam.team_name}
+                      </Link>
                     </li>
                   ))}
                 </ul>

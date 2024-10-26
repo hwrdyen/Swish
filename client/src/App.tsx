@@ -10,6 +10,7 @@ import SingleTeam from "./pages/singleTeam/SingleTeam";
 import Profile from "./pages/profile/Profile";
 import CreateTour from "./pages/createTour/CreateTour";
 import SingleTour from "./pages/singleTour/SingleTour";
+import CreateGame from "./pages/createGame/CreateGame";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
           <Route path="/team/:team_id" element={<SingleTeam />} />
           <Route path="/create-tour" element={<CreateTour />} />
           <Route path="/tour/:tour_id" element={<SingleTour />} />
+          <Route path="/create-game" element={<CreateGame />} />
         </Routes>
       </BrowserRouter>
     </>

@@ -3,11 +3,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { UserProfile } from "../../config/user-config";
 import { apiRequest } from "../../lib/apiRequest";
 import { AuthContext } from "../../context/AuthContext";
+import { AxiosError } from "axios";
 
 const Profile = () => {
   const [error, setError] = useState("");
   const [profileData, setProfileData] = useState<UserProfile | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [logoutLoading, setLogoutLoading] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
@@ -19,6 +21,27 @@ const Profile = () => {
     );
   }
   const { updateUser } = authContext;
+
+  const handleLogout = async () => {
+    setLogoutLoading(true);
+
+    try {
+      await apiRequest.post("/auth/logout");
+      await updateUser(null);
+      navigate("/");
+    } catch (err) {
+      // Check if the error is an instance of AxiosError
+      if (err instanceof AxiosError) {
+        // Access error message from the response data
+        console.log(err.response?.data.message);
+      } else {
+        // Handle non-Axios errors
+        console.log("Error:", err);
+      }
+    } finally {
+      setLogoutLoading(false);
+    }
+  };
 
   const handleDelete = async () => {
     try {
@@ -55,7 +78,7 @@ const Profile = () => {
     fetchProfileInfo();
   }, []); // Fetch when team_id changes
 
-  if (loading) {
+  if (loading || logoutLoading) {
     return <div>Loading...</div>; // Show loading indicator while fetching data
   }
 
@@ -90,6 +113,9 @@ const Profile = () => {
           <div>Loading...</div> // Show loading indicator while fetching data
         )}
       </div>
+      <button onClick={handleLogout} disabled={logoutLoading}>
+        Logout
+      </button>
       <button onClick={handleDelete} disabled={deleteLoading}>
         Delete User
       </button>

@@ -27,12 +27,54 @@ function App() {
           />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/create-team" element={<CreateTeam />} />
-          <Route path="/team/:team_id" element={<SingleTeam />} />
-          <Route path="/create-tour" element={<CreateTour />} />
-          <Route path="/tour/:tour_id" element={<SingleTour />} />
-          <Route path="/create-game" element={<CreateGame />} />
+          <Route
+            path="/profile"
+            element={
+              <Layout>
+                <Profile />
+              </Layout>
+            }
+          />
+          <Route
+            path="/create-team"
+            element={
+              <Layout>
+                <CreateTeam />
+              </Layout>
+            }
+          />
+          <Route
+            path="/team/:team_id"
+            element={
+              <Layout>
+                <SingleTeam />
+              </Layout>
+            }
+          />
+          <Route
+            path="/create-tour"
+            element={
+              <Layout>
+                <CreateTour />
+              </Layout>
+            }
+          />
+          <Route
+            path="/tour/:tour_id"
+            element={
+              <Layout>
+                <SingleTour />
+              </Layout>
+            }
+          />
+          <Route
+            path="/create-game"
+            element={
+              <Layout>
+                <CreateGame />
+              </Layout>
+            }
+          />
         </Routes>
       </BrowserRouter>
     </>

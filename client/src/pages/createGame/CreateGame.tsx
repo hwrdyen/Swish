@@ -185,7 +185,6 @@ const CreateGame = () => {
           </div>
         )}
       </div>
-      <Link to={"/"}>Home</Link>
     </div>
   );
 };

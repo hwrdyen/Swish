@@ -79,7 +79,6 @@ const SingleTour = () => {
           <p>No players available</p> // Message for empty player_list
         )}
       </div>
-      <Link to={"/"}>Home</Link>
     </div>
   );
 };

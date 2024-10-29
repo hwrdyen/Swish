@@ -93,7 +93,6 @@ const Profile = () => {
       <button onClick={handleDelete} disabled={deleteLoading}>
         Delete User
       </button>
-      <Link to={"/"}>Home</Link>
     </div>
   );
 };

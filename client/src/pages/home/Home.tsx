@@ -22,6 +22,10 @@ const Home = () => {
     navigate("/create-tour");
   };
 
+  const handleCreateGame = () => {
+    navigate("/create-game");
+  };
+
   // Fetch team data from the API
   const { allCreatedTeamData, fetchingCreatedTeams } = useTeams();
 
@@ -40,6 +44,7 @@ const Home = () => {
           </p>
           <button onClick={handleCreateTeam}>Create My Team</button>
           <button onClick={handleCreateTournament}>Create My Tournament</button>
+          <button onClick={handleCreateGame}>Create Game</button>
           <div>
             <h2>Created Teams:</h2>
             {!fetchingCreatedTeams ? (

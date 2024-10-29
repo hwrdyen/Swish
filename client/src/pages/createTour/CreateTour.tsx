@@ -137,7 +137,6 @@ const CreateTour = () => {
           Please login at <Link to={"/login"}>Login</Link>
         </div>
       )}
-      <Link to={"/"}>Home</Link>
     </div>
   );
 };

@@ -87,7 +87,6 @@ const SingleTeam = () => {
           <div>Loading...</div> // Show loading indicator while fetching data
         )}
       </div>
-      <Link to={"/"}>Home</Link>
     </div>
   );
 };

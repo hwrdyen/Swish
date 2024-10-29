@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { useTeams } from "../../hooks/useTeam";
 import { useTours } from "../../hooks/useTour";
+import { useGames } from "../../hooks/useGame";
 
 const Home = () => {
   const authContext = useContext(AuthContext);
@@ -26,21 +27,8 @@ const Home = () => {
 
   // Fetch my-tour data from the API
   const { allTourData, fetchingTours } = useTours();
-  // const [allTourData, setAllTourData] = useState<TourData[]>([]);
-  // const [fetchingTours, setFetchingTours] = useState(true);
-  // const fetchTours = async () => {
-  //   try {
-  //     const response = await apiRequest.get("/user/my-tours");
-  //     setAllTourData(response.data); // Assuming the data is stored in response.data
-  //   } catch (error) {
-  //     console.error("Failed to fetch tour data", error);
-  //   } finally {
-  //     setFetchingTours(false);
-  //   }
-  // };
-  // useEffect(() => {
-  //   fetchTours();
-  // }, []);
+
+  const { allGameData } = useGames();
 
   return (
     <div>
@@ -92,6 +80,27 @@ const Home = () => {
             )}
 
             <h2>All Game Schedule:</h2>
+            {allGameData.length > 0 ? (
+              <ul>
+                {allGameData.map((allSingleGame) => {
+                  const gameDate = new Date(allSingleGame.game_date);
+
+                  return (
+                    <li key={allSingleGame.id}>
+                      {
+                        isNaN(gameDate.getTime()) // Check if gameDate is valid
+                          ? "Invalid date" // Fallback for invalid dates
+                          : gameDate.toLocaleDateString() // Format the date
+                      }{" "}
+                      {allSingleGame.home_team_id} vs{" "}
+                      {allSingleGame.away_team_id}
+                    </li>
+                  );
+                })}
+              </ul>
+            ) : (
+              <p>No games available.</p> // Optional: Add a message when there are no games
+            )}
           </div>
         </>
       ) : (

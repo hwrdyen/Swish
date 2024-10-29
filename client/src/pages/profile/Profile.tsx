@@ -27,8 +27,8 @@ const Profile = () => {
       await updateUser(null);
       navigate("/");
     } catch (err) {
-      console.error("Failed to fetch team data", err);
-      setError("Failed to fetch team data."); // Set error message on fetch failure
+      console.error("Failed to fetch profile data", err);
+      setError("Failed to fetch profile data."); // Set error message on fetch failure
     } finally {
       setDeleteLoading(false); // Stop loading when done
     }
@@ -44,8 +44,8 @@ const Profile = () => {
         setError("No team was associated with this ID."); // Set error message if no team found
       }
     } catch (err) {
-      console.error("Failed to fetch team data", err);
-      setError("Failed to fetch team data."); // Set error message on fetch failure
+      console.error("Failed to fetch profile data", err);
+      setError("Failed to fetch profile data."); // Set error message on fetch failure
     } finally {
       setLoading(false); // Stop loading when done
     }

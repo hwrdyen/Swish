@@ -30,12 +30,9 @@ const Profile = () => {
       await updateUser(null);
       navigate("/");
     } catch (err) {
-      // Check if the error is an instance of AxiosError
       if (err instanceof AxiosError) {
-        // Access error message from the response data
         console.log(err.response?.data.message);
       } else {
-        // Handle non-Axios errors
         console.log("Error:", err);
       }
     } finally {

@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom";
-import { useState, useContext } from "react";
-import { AxiosError } from "axios";
+import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
-import { apiRequest } from "../../lib/apiRequest";
 
 const Navbar = () => {
   const authContext = useContext(AuthContext);
@@ -11,7 +9,7 @@ const Navbar = () => {
       "useContext(AuthContext) must be used within an AuthContextProvider"
     );
   }
-  const { currentUser, isLoggedIn, updateUser } = authContext;
+  const { currentUser, isLoggedIn } = authContext;
 
   return (
     <>

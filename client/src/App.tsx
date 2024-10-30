@@ -11,6 +11,7 @@ import Profile from "./pages/profile/Profile";
 import CreateTour from "./pages/createTour/CreateTour";
 import SingleTour from "./pages/singleTour/SingleTour";
 import CreateGame from "./pages/createGame/CreateGame";
+import SingleGame from "./pages/singleGame/SingleGame";
 
 function App() {
   return (
@@ -72,6 +73,14 @@ function App() {
             element={
               <Layout>
                 <CreateGame />
+              </Layout>
+            }
+          />
+          <Route
+            path="/game/:game_id"
+            element={
+              <Layout>
+                <SingleGame />
               </Layout>
             }
           />

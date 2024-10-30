@@ -88,18 +88,14 @@ const Home = () => {
             {allGameData.length > 0 ? (
               <ul>
                 {allGameData.map((allSingleGame) => {
-                  const gameDate = new Date(allSingleGame.game_date);
-
                   return (
-                    <li key={allSingleGame.id}>
-                      {
-                        isNaN(gameDate.getTime()) // Check if gameDate is valid
-                          ? "Invalid date" // Fallback for invalid dates
-                          : gameDate.toLocaleDateString() // Format the date
-                      }{" "}
-                      {allSingleGame.home_team_id} vs{" "}
-                      {allSingleGame.away_team_id}
-                    </li>
+                    <Link to={`/game/${allSingleGame.id}`}>
+                      <li key={allSingleGame.id}>
+                        {new Date(allSingleGame.game_date).toLocaleDateString()}{" "}
+                        {allSingleGame.home_team_id} vs{" "}
+                        {allSingleGame.away_team_id}
+                      </li>
+                    </Link>
                   );
                 })}
               </ul>

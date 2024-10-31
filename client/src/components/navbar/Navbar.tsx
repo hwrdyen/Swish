@@ -1,3 +1,4 @@
+import "./Navbar.scss";
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
@@ -12,19 +13,25 @@ const Navbar = () => {
   const { currentUser, isLoggedIn } = authContext;
 
   return (
-    <>
-      <Link to={"/"}>Swish</Link>
+    <div className="Navbar__container">
+      <Link to={"/"} className="Navbar__home">
+        Swish
+      </Link>
 
       {isLoggedIn && currentUser ? (
-        <div>
-          <Link to="/profile">
+        <div className="Navbar__auth">
+          <Link to="/profile" className="Navbar__auth--link">
             {currentUser.avatar ? (
-              <img src={currentUser.avatar} alt="User Avatar" />
+              <img
+                src={currentUser.avatar}
+                alt="User Avatar"
+                className="Navbar__auth--img"
+              />
             ) : (
               <img
                 src={"/user-avatar.png"}
                 alt="Default Avatar"
-                style={{ width: "100px", height: "100px" }}
+                className="Navbar__auth--img"
               />
             )}
           </Link>
@@ -32,7 +39,7 @@ const Navbar = () => {
       ) : (
         <Link to={"/login"}>Login</Link>
       )}
-    </>
+    </div>
   );
 };
 

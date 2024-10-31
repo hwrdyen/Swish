@@ -1,0 +1,62 @@
+@use "variable" as *;
+@use "typography" as *;
+@use "sass:map";
+
+// mobile-first mixins
+@mixin sm {
+  @content;
+}
+
+@mixin md {
+  @media screen and (min-width: #{map.get($breakpoints, "md")}) {
+    @content;
+  }
+}
+
+@mixin lg {
+  @media screen and (min-width: #{map.get($breakpoints, "lg")}) {
+    @content;
+  }
+}
+
+// Helper mixins for specific cases
+@mixin only-sm {
+  @media screen and (max-width: #{map.get($breakpoints, "md") - 1}) {
+    @content;
+  }
+}
+
+@mixin only-md {
+  @media screen and (min-width: #{map.get($breakpoints, "md")}) and (max-width: #{map.get($breakpoints, "lg") - 1}) {
+    @content;
+  }
+}
+
+@mixin only-lg {
+  @media screen and (min-width: #{map.get($breakpoints, "lg")}) {
+    @content;
+  }
+}
+
+// Utility mixins for more control
+@mixin up($breakpoint) {
+  $value: map.get($breakpoints, $breakpoint);
+  @if $value {
+    @media screen and (min-width: #{$value}) {
+      @content;
+    }
+  } @else {
+    @warn "Invalid breakpoint: #{$breakpoint}";
+  }
+}
+
+@mixin down($breakpoint) {
+  $value: map.get($breakpoints, $breakpoint);
+  @if $value {
+    @media screen and (max-width: #{$value - 1}) {
+      @content;
+    }
+  } @else {
+    @warn "Invalid breakpoint: #{$breakpoint}";
+  }
+}

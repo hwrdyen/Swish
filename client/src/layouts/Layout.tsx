@@ -1,3 +1,4 @@
+import "./Layout.scss";
 import Navbar from "../components/navbar/Navbar";
 
 interface Props {
@@ -6,9 +7,9 @@ interface Props {
 
 const Layout = ({ children }: Props) => {
   return (
-    <div>
+    <div className="Layout__container">
       <Navbar />
-      <div>{children}</div>
+      <div className="Layout--child__container">{children}</div>
     </div>
   );
 };
